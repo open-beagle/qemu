@@ -53,16 +53,34 @@ apt install -y pkg-config build-essential ninja-build git \
   libspice-protocol-dev \
   libspice-server-dev 
 
-mkdir build
+rm -rf build
+mkdir -p build
 cd build
 
-../configure --target-list=loongarch64-softmmu,loongarch64-linux-user \
+../configure \
   --static \
   --disable-werror \
-  --disable-xkbcommon \
-  --disable-libudev \
-  --disable-sdl \
-  --disable-gtk \
-  --prefix=$PWD/qemu-7.2.9
+  --prefix=$PWD/.qemu \
+  --target-list=aarch64_be-linux-user,aarch64-linux-user,alpha-linux-user,arm-linux-user,armeb-linux-user,cris-linux-user,hexagon-linux-user,hppa-linux-user,i386-linux-user,loongarch64-linux-user,m68k-linux-user,microblaze-linux-user,microblazeel-linux-user,mips-linux-user,mips64-linux-user,mips64el-linux-user,mipsel-linux-user,mipsn32-linux-user,mipsn32el-linux-user,nios2-linux-user,or1k-linux-user,ppc-linux-user,ppc64-linux-user,ppc64le-linux-user,riscv32-linux-user,riscv64-linux-user,s390x-linux-user,sh4-linux-user,sh4eb-linux-user,sparc-linux-user,sparc32plus-linux-user,sparc64-linux-user,x86_64-linux-user,xtensa-linux-user,xtensaeb-linux-user
 
 make -j $(nproc)
+
+make install
+
+cd .qemu/bin
+
+for file in ./*
+do 
+  strip $file
+  mv $file $file-static
+done
+
+ln -s qemu-x86_64-static qemu-amd64-static
+ln -s qemu-aarch64-static qemu-arm64-static
+ln -s qemu-arm-static qemu-armel-static
+ln -s qemu-arm-static qemu-armhf-static
+ln -s qemu-loongarch64-static qemu-loong64-static
+ln -s qemu-ppc-static qemu-powerpc-static
+ln -s qemu-ppc64le-static qemu-ppc64el-static
+
+ls -lh
