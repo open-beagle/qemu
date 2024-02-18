@@ -63,21 +63,3 @@ cd build
 make -j $(nproc)
 
 make install
-
-cd .qemu/bin
-
-for file in ./*
-do 
-  strip $file
-  mv $file $file-static
-done
-
-ln -s qemu-x86_64-static qemu-amd64-static
-ln -s qemu-aarch64-static qemu-arm64-static
-ln -s qemu-arm-static qemu-armel-static
-ln -s qemu-arm-static qemu-armhf-static
-ln -s qemu-loongarch64-static qemu-loong64-static
-ln -s qemu-ppc-static qemu-powerpc-static
-ln -s qemu-ppc64le-static qemu-ppc64el-static
-
-ls -lh
